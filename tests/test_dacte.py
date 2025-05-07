@@ -34,6 +34,12 @@ def test_dacte_default(tmp_path, load_dacte):
     assert_pdf_equal(dacte, pdf_path, tmp_path)
 
 
+def test_dacte_without_compl(tmp_path, load_dacte):
+    dacte = load_dacte("dacte_test_without_compl.xml")
+    pdf_path = get_pdf_output_path("dacte", "dacte_without_compl")
+    assert_pdf_equal(dacte, pdf_path, tmp_path)
+
+
 def test_dacte_overload(tmp_path, load_dacte):
     dacte_config = DacteConfig(margins=Margins(top=10, right=10, bottom=10, left=10))
     dacte = load_dacte("dacte_test_overload.xml", config=dacte_config)

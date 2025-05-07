@@ -74,7 +74,7 @@ class Dacte(xFPDF):
         self.v_prest = root.find(f"{URL}vPrest")
         self.inf_modal = root.find(f"{URL}infModal")
         self.imp = root.find(f"{URL}imp")
-        self.compl = root.find(f"{URL}compl")
+        self.compl = root.find(f"{URL}compl") or []
         self.aquav = root.find(f"{URL}aquav")
         self.ferrov = root.find(f"{URL}ferrov")
 
