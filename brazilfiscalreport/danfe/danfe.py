@@ -60,10 +60,12 @@ class Danfe(xFPDF):
         self.invoice_display = config.invoice_display
         self.display_pis_cofins = config.display_pis_cofins
         self.product_description_config = config.product_description_config
+        self.watermark_cancelled = config.watermark_cancelled
 
         root = ET.fromstring(xml)
         self.inf_nfe = root.find(f"{URL}infNFe")
         self.prot_nfe = root.find(f"{URL}protNFe")
+
         self.emit = root.find(f"{URL}emit")
         self.ide = root.find(f"{URL}ide")
         self.dest = root.find(f"{URL}dest")
@@ -488,14 +490,23 @@ class Danfe(xFPDF):
         is_protocol_available = bool(self.prot_nfe)
 
         # Exit early if no watermark is needed
+        font_size = 60
+        if self.watermark_cancelled:
+            if is_production_environment:
+                watermark_text = "CANCELADA"
+            else:
+                watermark_text = "CANCELADA - SEM VALOR FISCAL"
+                font_size = 45
+        else:
+            watermark_text = "SEM VALOR FISCAL"
+
         if is_production_environment and is_protocol_available:
             return
+        self.set_font(self.default_font, "B", font_size)
 
-        self.set_font(self.default_font, "B", 60)
-        watermark_text = "SEM VALOR FISCAL"
         width = self.get_string_width(watermark_text)
         self.set_text_color(r=220, g=150, b=150)
-        height = 15
+        height = font_size * 0.25
         page_width = self.w
         page_height = self.h
         x_center = (page_width - width) / 2
