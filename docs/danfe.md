@@ -141,7 +141,7 @@ Here is a breakdown of all the configuration options available in `DanfeConfig`:
 **Product Description Config**
 
 - **Type**: `ProductDescriptionConfig`
-- **Fields**: `display_branch`, `branch_info_prefix`, `display_additional_info`, `display_anp` and `display_anvisa`.
+- **Fields**: `display_branch`, `branch_info_prefix`, `display_additional_info`, `display_anvisa`, `display_anp`.
 - **Description**: Whether or not to display the product branch in the DANFE product description.
 - **Example**:
     ```python
@@ -159,6 +159,18 @@ Here is a breakdown of all the configuration options available in `DanfeConfig`:
     config.display_anp = False
     config.display_anvisa = False
     ```
+
+---
+
+**Watermark cancelled**
+
+- **Type**: `Bool`
+- **Description**: Indicates whether the "CANCELADA" watermark should be displayed on the DANFE for a cancelled invoice.
+- **Example**:
+    ```python
+    config.watermark_cancelled = True
+    ```
+- **Default**: `SEM VALOR FISCAL`.
 
 ---
 
