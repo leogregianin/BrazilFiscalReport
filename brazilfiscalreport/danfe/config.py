@@ -60,6 +60,7 @@ class DanfeConfig:
     invoice_display: InvoiceDisplay = InvoiceDisplay.FULL_DETAILS
     font_type: FontType = FontType.TIMES
     display_pis_cofins: bool = False
+    watermark_cancelled: bool = False
     product_description_config: ProductDescriptionConfig = field(
         default_factory=ProductDescriptionConfig
     )

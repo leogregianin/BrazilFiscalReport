@@ -183,3 +183,37 @@ def test_danfe_product_description_with_anvisa(tmp_path, load_danfe):
     danfe = load_danfe("nfe_test_anvisa.xml", config=config)
     pdf_path = get_pdf_output_path("danfe", "danfe_anvisa")
     assert_pdf_equal(danfe, pdf_path, tmp_path)
+
+
+def test_danfe_cancelled_with_production_environment(tmp_path, load_danfe):
+    config = DanfeConfig(
+        margins=Margins(top=2, right=2, bottom=2, left=2),
+        watermark_cancelled=True,
+        product_description_config=ProductDescriptionConfig(
+            display_anvisa=True,
+            display_additional_info=False,
+        ),
+    )
+    danfe = load_danfe("nfe_cancelled_with_production_environment.xml", config=config)
+    pdf_path = get_pdf_output_path(
+        "danfe", "danfe_cancelled_with_production_environment"
+    )
+    assert_pdf_equal(danfe, pdf_path, tmp_path)
+
+
+def test_danfe_cancelled_without_production_environment(tmp_path, load_danfe):
+    config = DanfeConfig(
+        margins=Margins(top=2, right=2, bottom=2, left=2),
+        watermark_cancelled=True,
+        product_description_config=ProductDescriptionConfig(
+            display_anvisa=True,
+            display_additional_info=False,
+        ),
+    )
+    danfe = load_danfe(
+        "nfe_cancelled_without_production_environment.xml", config=config
+    )
+    pdf_path = get_pdf_output_path(
+        "danfe", "danfe_cancelled_without_production_environment"
+    )
+    assert_pdf_equal(danfe, pdf_path, tmp_path)
