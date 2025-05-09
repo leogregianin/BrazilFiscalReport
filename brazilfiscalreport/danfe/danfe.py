@@ -309,11 +309,11 @@ class Danfe(xFPDF):
         if self.product_description_config.display_anvisa:
             _meds = prod.findall(f"{URL}med")
             for _med in _meds:
-                codigo_anvisa = extract_text(_med, "codigoAnvisa")
+                c_prod_anvisa = extract_text(_med, "cProdANVISA")
                 v_pmc = format_number(
                     extract_text(_med, "vPMC"), self.quantity_precision
                 )
-                add_infos.append(f"cProdANVISA: {codigo_anvisa} PMC: {v_pmc}")
+                add_infos.append(f"cProdANVISA: {c_prod_anvisa} PMC: {v_pmc}")
         cbenef = extract_text(prod, "cBenef")
         ccredpresumido = extract_text(prod, "cCredPresumido")
 
