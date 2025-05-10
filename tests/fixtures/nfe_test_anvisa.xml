@@ -90,7 +90,7 @@
                     <dFab>2024-01-25</dFab>
                 </rastro>
                 <med>
-                    <codigoAnvisa>123456789</codigoAnvisa>
+                    <cProdANVISA>123456789</cProdANVISA>
                     <vPMC>120.00</vPMC>
                 </med>
             </prod>

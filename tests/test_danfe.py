@@ -182,6 +182,7 @@ def test_danfe_product_description_with_anvisa(tmp_path, load_danfe):
     )
     danfe = load_danfe("nfe_test_anvisa.xml", config=config)
     pdf_path = get_pdf_output_path("danfe", "danfe_anvisa")
+    # assert_pdf_equal(danfe, pdf_path, tmp_path, generate = True)
     assert_pdf_equal(danfe, pdf_path, tmp_path)
 
 
