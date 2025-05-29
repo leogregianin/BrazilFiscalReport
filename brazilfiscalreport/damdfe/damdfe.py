@@ -57,6 +57,7 @@ class Damdfe(xFPDF):
         self.emit = root.find(f"{URL}emit")
         self.ide = root.find(f"{URL}ide")
         self.inf_modal = root.find(f"{URL}infModal")
+        self.condutor = root.find(f"{URL}condutor")
         self.inf_doc = root.find(f"{URL}infDoc")
         self.inf_mun_descarga = root.find(f"{URL}infMunDescarga")
         self.tot = root.find(f"{URL}tot")
@@ -1086,8 +1087,8 @@ class Damdfe(xFPDF):
         self.modal_uf = extract_text(self.inf_modal, "UF")
         self.rntrc = extract_text(self.inf_modal, "RNTRC")
         self.renavam = extract_text(self.inf_modal, "RENAVAM")
-        self.cpf_condutor = format_cpf_cnpj(extract_text(self.inf_modal, "CPF"))
-        self.nome_condutor = extract_text(self.inf_modal, "xNome")
+        self.cpf_condutor = format_cpf_cnpj(extract_text(self.condutor, "CPF"))
+        self.nome_condutor = extract_text(self.condutor, "xNome")
         # Informações para ANTT
         # QTD. CT-e
         self.set_font(self.default_font, "", 6.5)
