@@ -115,10 +115,12 @@ class DaCCe(xFPDF):
 
         # Generate a Code128 Barcode as SVG:
         svg_img_bytes = BytesIO()
-        Code128(key, writer=SVGWriter()).write(svg_img_bytes)
+        Code128(key, writer=SVGWriter()).write(
+            svg_img_bytes, options={"write_text": False}
+        )
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=UserWarning)
-            self.image(svg_img_bytes, x=127, y=60, w=73, h=15)
+            self.image(svg_img_bytes, x=127, y=60, w=73, h=8)
 
         self.set_font("Helvetica", "", 7)
         self.text(x=130, y=78, text=" ".join(chunks(key, 4)))

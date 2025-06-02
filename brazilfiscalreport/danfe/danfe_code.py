@@ -18,10 +18,12 @@ class DanfeCode(Element):
         x = self.x + 0.5
         y = self.y + 0.5
         w = self.w
-        h = 12.5
+        h = 8.5
         # Generate a Code128 Barcode as SVG:
         svg_img_bytes = BytesIO()
-        Code128(self.key_nfe, writer=SVGWriter()).write(svg_img_bytes)
+        Code128(self.key_nfe, writer=SVGWriter()).write(
+            svg_img_bytes, options={"write_text": False}
+        )
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=UserWarning)
             self.pdf.image(svg_img_bytes, x=x, y=y, w=w, h=h)
