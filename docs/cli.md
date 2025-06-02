@@ -1,6 +1,8 @@
 
 Generate DACTE, DANFE, and DACCE documents directly from the terminal. The PDF will be saved in the current directory, and you'll need to create a config.yaml file with issuer details and other configurations.
 
+Use the --version or -v option to check the installed version.
+
 #### Example of `config.yaml` ⚙️
 
 ```yaml
