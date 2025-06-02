@@ -430,10 +430,12 @@ class Dacte(xFPDF):
         section_start_y += 11
         y = section_start_y + 0.5
         w = 82
-        h = 11.5
+        h = 8.5
         self.rect(x=y_margin_ret, y=section_start_y, w=84, h=10, style="")
         svg_img_bytes = BytesIO()
-        Code128(self.key_cte, writer=SVGWriter()).write(svg_img_bytes)
+        Code128(self.key_cte, writer=SVGWriter()).write(
+            svg_img_bytes, options={"write_text": False}
+        )
         self.image(svg_img_bytes, x=y_margin_ret + 1, y=y, w=w, h=h)
 
         section_start_y += 10
