@@ -2,6 +2,7 @@
 
 import re
 import textwrap
+import warnings
 import xml.etree.ElementTree as ET
 from io import BytesIO
 from xml.etree.ElementTree import Element
@@ -436,7 +437,9 @@ class Dacte(xFPDF):
         Code128(self.key_cte, writer=SVGWriter()).write(
             svg_img_bytes, options={"write_text": False}
         )
-        self.image(svg_img_bytes, x=y_margin_ret + 1, y=y, w=w, h=h)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=UserWarning)
+            self.image(svg_img_bytes, x=y_margin_ret + 1, y=y, w=w, h=h)
 
         section_start_y += 10
 

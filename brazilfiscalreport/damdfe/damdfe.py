@@ -1,5 +1,6 @@
 # Copyright (C) 2024 Engenere - Cristiano Mafra Junior
 
+import warnings
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from io import BytesIO
@@ -862,9 +863,15 @@ class Damdfe(xFPDF):
         )
         margins_offset = {1: 8, 2: 8, 3: 7, 4: 7, 5: 6, 6: 6, 7: 5.5, 8: 5, 9: 4, 10: 4}
         x_offset = margins_offset.get(self.config.margins.right)
-        self.image(
-            svg_img_bytes, x=x_middle + x_offset, y=self.t_margin + 32, w=86.18, h=17.0
-        )
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=UserWarning)
+            self.image(
+                svg_img_bytes,
+                x=x_middle + x_offset,
+                y=self.t_margin + 32,
+                w=86.18,
+                h=17.0,
+            )
 
         self.set_font(self.default_font, "", 6.5)
         self.set_xy(x=x_middle + 25, y=y_middle + 23)
