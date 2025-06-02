@@ -3,6 +3,8 @@ from pathlib import Path
 import click
 import yaml
 
+from brazilfiscalreport import __version__
+
 
 def load_config():
     try:
@@ -28,6 +30,9 @@ def get_default_issuer():
 
 
 @click.group()
+@click.version_option(
+    __version__, "-v", "--version", message="bfrep version %(version)s"
+)
 def cli():
     pass
 
