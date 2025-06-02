@@ -1036,7 +1036,8 @@ class Damdfe(xFPDF):
             align="L",
         )
 
-        self.set_xy(x=x_margin + 50, y=y_middle + 3)
+        tp_amb_offset = 50 if self.tp_amb == "PRODUÇÃO" else 47.5
+        self.set_xy(x=x_margin + tp_amb_offset, y=y_middle + 3)
         self.multi_cell(
             w=100,
             h=3,
