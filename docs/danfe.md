@@ -166,6 +166,7 @@ Here is a breakdown of all the configuration options available in `DanfeConfig`:
 
 - **Type**: `Bool`
 - **Description**: Indicates whether the "CANCELADA" watermark should be displayed on the DANFE for a cancelled invoice.
+    It also generates a watermark for XML files without the `protNfe` tag.
 - **Example**:
     ```python
     config.watermark_cancelled = True
