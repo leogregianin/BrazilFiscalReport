@@ -660,7 +660,7 @@ class Damdfe(xFPDF):
             f"{cep}\n"
             f"{extract_text(self.emit, 'xMun')} - "
             f"{extract_text(self.emit, 'UF')}\n"
-            f"CNPJ:{extract_text(self.emit, 'CNPJ')} "
+            f"CNPJ:{format_cpf_cnpj(extract_text(self.emit, 'CNPJ'))} "
             f"IE:{extract_text(self.emit, 'IE')}\n"
             f"RNTRC:{extract_text(self.inf_modal, 'RNTRC')} "
             f"TELEFONE:{fone}"
