@@ -84,6 +84,14 @@
                             <xNome>CONDUTOR TESTE</xNome>
                             <CPF>92309230203</CPF>
                         </condutor>
+                        <condutor>
+                            <xNome>CONDUTOR TESTE 1</xNome>
+                            <CPF>92309230203</CPF>
+                        </condutor>
+                        <condutor>
+                            <xNome>CONDUTOR TESTE 2</xNome>
+                            <CPF>92309230203</CPF>
+                        </condutor>
                         <tpRod>02</tpRod>
                         <tpCar>02</tpCar>
                         <UF>SC</UF>
