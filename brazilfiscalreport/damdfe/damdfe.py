@@ -178,6 +178,17 @@ class Damdfe(xFPDF):
             self.ferrov_str.append((vag_serie, vag_nvag, vag_seq, vag_tu))
         return self.ferrov_str
 
+    def _build_condutores_str(self):
+        self.condutores_str = []
+        for condutor in self.inf_modal.findall(
+            f"{URL}rodo/{URL}veicTracao/{URL}condutor"
+        ):
+            nome_condutor = extract_text(condutor, "xNome")
+            cpf_condutor = extract_text(condutor, "CPF")
+            if nome_condutor and cpf_condutor:
+                self.condutores_str.append({"nome": nome_condutor, "cpf": cpf_condutor})
+        return self.condutores_str
+
     def _build_percurso_str(self):
         self.percurso_str = ""
         for per in self.ide:
@@ -441,15 +452,11 @@ class Damdfe(xFPDF):
             start_y=y_margin + 26, end_y=y_margin + 43, num_lines=2
         )
 
-        position_middle_dict = {
-            5: 26,
-            6: 25,
-            7: 24,
-            8: 23,
-            9: 22,
-            10: 21,
-        }
+        position_middle_dict = {5: 26, 6: 25, 7: 24, 8: 23, 9: 22, 10: 21}
+        position_condutores_dict = {5: 76, 6: 74, 7: 72, 8: 71, 9: 69, 10: 68}
+
         position_middle = position_middle_dict.get(self.config.margins.left)
+        position_condutores = position_condutores_dict.get(self.config.margins.left)
 
         self.set_font(self.default_font, "B", 7)
         self.set_xy(x=y_middle + position_middle, y=y_middle - 2.8)
@@ -460,28 +467,6 @@ class Damdfe(xFPDF):
             border=0,
             align="L",
         )
-
-        self.set_font(self.default_font, "", 7)
-        self.set_xy(x=y_middle + position_middle, y=y_middle + 0.5)
-        self.multi_cell(
-            w=100,
-            h=3,
-            text=self.cpf_condutor,
-            border=0,
-            align="L",
-        )
-
-        position_condutores_dict = {
-            5: 76,
-            6: 74,
-            7: 72,
-            8: 71,
-            9: 69,
-            10: 68,
-        }
-        position_condutores = position_condutores_dict.get(self.config.margins.left)
-
-        self.set_font(self.default_font, "B", 7)
         self.set_xy(x=y_middle + position_condutores, y=y_middle - 2.8)
         self.multi_cell(
             w=100,
@@ -492,14 +477,25 @@ class Damdfe(xFPDF):
         )
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x=y_middle + position_condutores, y=y_middle + 0.5)
-        self.multi_cell(
-            w=100,
-            h=3,
-            text=self.nome_condutor,
-            border=0,
-            align="L",
-        )
+        self.condutores_str = self._build_condutores_str()
+        current_y = y_middle + 0.5
+        line_height = 2.5
+
+        for cond in self.condutores_str:
+            self.set_xy(x=y_middle + position_middle, y=current_y)
+            self.multi_cell(
+                w=45,
+                h=line_height,
+                text=format_cpf_cnpj(cond["cpf"]),
+                border=0,
+                align="L",
+            )
+
+            self.set_xy(x=y_middle + position_condutores, y=current_y)
+            self.multi_cell(w=45, h=line_height, text=cond["nome"], border=0, align="L")
+
+            current_y += line_height
+        self.set_xy(x=x_margin + 100, y=y_middle + 3.5)
 
     def draw_ferroviario_info(self, x_margin, y_margin, y_middle, page_width):
         self._build_ferrov_str()
