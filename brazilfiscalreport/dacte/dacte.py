@@ -18,6 +18,7 @@ from ..utils import (
     format_xDime,
     get_date_utc,
     get_tag_text,
+    limit_text,
 )
 from ..xfpdf import xFPDF
 from .config import DacteConfig, ModalType, ReceiptPosition
@@ -693,7 +694,7 @@ class Dacte(xFPDF):
 
         self.set_font(self.default_font, "B", 7)
         self.set_xy(x=self.l_margin + 16, y=section_start_y + 2)
-        self.multi_cell(w=0, h=15, text=f"{self.rem_nome}", align="L")
+        self.multi_cell(w=0, h=15, text=limit_text(self.rem_nome, 48), align="L")
 
         self.set_font(self.default_font, "", 7)
         self.set_xy(x=self.l_margin, y=section_start_y + 2)
@@ -773,7 +774,7 @@ class Dacte(xFPDF):
 
         self.set_font(self.default_font, "B", 7)
         self.set_xy(x_line_middle + 22, section_start_y + 2)
-        self.multi_cell(w=0, h=15, text=f"{self.dest_nome}", align="L")
+        self.multi_cell(w=0, h=15, text=limit_text(self.dest_nome, 48), align="L")
 
         self.set_font(self.default_font, "", 7)
         self.set_xy(x_line_middle, section_start_y + 2)
@@ -857,7 +858,7 @@ class Dacte(xFPDF):
         self.multi_cell(w=0, h=3, text="RECEBEDOR", align="L")
         self.set_font(self.default_font, "B", 7)
         self.set_xy(x_line_middle + 20, section_start_y + 2)
-        self.multi_cell(w=0, h=3, text=f"{self.receb_nome}", align="L")
+        self.multi_cell(w=0, h=3, text=limit_text(self.receb_nome, 48), align="L")
 
         self.set_font(self.default_font, "", 7)
         self.set_xy(x_line_middle, section_start_y + 2)
@@ -924,7 +925,7 @@ class Dacte(xFPDF):
         self.multi_cell(w=0, h=3, text="EXPEDIDOR", align="L")
         self.set_font(self.default_font, "B", 7)
         self.set_xy(x=self.l_margin + 16, y=section_start_y + 2)
-        self.multi_cell(w=0, h=3, text=f"{self.exped_nome}", align="L")
+        self.multi_cell(w=0, h=3, text=limit_text(self.exped_nome, 48), align="L")
 
         self.set_font(self.default_font, "", 7)
         self.set_xy(x=self.l_margin, y=section_start_y + 2)
@@ -1030,7 +1031,7 @@ class Dacte(xFPDF):
 
         self.set_font(self.default_font, "B", 7.6)
         self.set_xy(x_margin + 32, section_start_y)
-        self.multi_cell(w=0, h=4, text=f"{self.tomador_nome}", align="L")
+        self.multi_cell(w=0, h=4, text=limit_text(self.tomador_nome, 38), align="L")
 
         self.set_font(self.default_font, "", 7.6)
         self.set_xy(x_margin, section_start_y)
