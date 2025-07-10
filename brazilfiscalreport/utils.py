@@ -97,3 +97,18 @@ def format_xDime(value):
         if len(parts) == 3 and all(part.isdigit() for part in parts):
             return f"{value} (cm)"
     return value
+
+
+def limit_text(text, max_len=None):
+    words = text.split()
+    result = []
+    length = 0
+
+    for word in words:
+        extra_space = 1 if result else 0
+        if length + len(word) + extra_space > max_len:
+            break
+        result.append(word)
+        length += len(word) + extra_space
+
+    return " ".join(result)

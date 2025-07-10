@@ -81,8 +81,8 @@
             <rem>
                 <CNPJ>23924902942209</CNPJ>
                 <IE>224242421</IE>
-                <xNome>INDUSTRIA FANTASMA DE TESTE</xNome>
-                <xFant>INDUSTRIA FANTASMA DE TESTE</xFant>
+                <xNome>CTE EMITIDO EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xNome>
+                <xFant>CTE EMITIDO EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xFant>
                 <fone>47232332239</fone>
                 <enderReme>
                     <xLgr>RODOVIA SC FANTASMA</xLgr>
@@ -99,7 +99,7 @@
             <exped>
                 <CNPJ>23924902942209</CNPJ>
                 <IE>224242421</IE>
-                <xNome>CTE EMITIDO EM AMBIENTE DE TESTE</xNome>
+                <xNome>CTE EMITIDO EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xNome>
                 <fone>47232332239</fone>
                 <enderExped>
                     <xLgr>RODOVIA SC FANTASMA</xLgr>
@@ -116,7 +116,7 @@
             <receb>
                 <CNPJ>03364555000100</CNPJ>
                 <IE>254409377</IE>
-                <xNome>CTE EMITIDO EM AMBIENTE DE TESTE</xNome>
+                <xNome>CTE EMITIDO EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xNome>
                 <fone>47232332239</fone>
                 <enderReceb>
                     <xLgr>RODOVIA SC FANTASMA</xLgr>
@@ -133,7 +133,7 @@
             <dest>
                 <CNPJ>02394820392092</CNPJ>
                 <IE>224242421</IE>
-                <xNome>EMPRESA DE TESTE</xNome>
+                <xNome>CTE EMITIDO EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xNome>
                 <fone>23424242442</fone>
                 <enderDest>
                     <xLgr>TESTE L.A</xLgr>
