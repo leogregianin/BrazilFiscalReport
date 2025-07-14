@@ -553,6 +553,10 @@ class Dacte(xFPDF):
         self.mun_fim = extract_text(self.ide, "xMunFim")
         self.est_inico = extract_text(self.ide, "UFIni")
         self.est_fim = extract_text(self.ide, "UFFim")
+        self.prod_pre = extract_text(self.inf_carga, "proPred")
+        self.v_total_carga = format_number(
+            extract_text(self.inf_carga, "vCarga"), precision=2
+        )
 
         # Função para extrair dados de uma entidade do XML
         def extract_entity_data(node, prefix):
@@ -683,7 +687,7 @@ class Dacte(xFPDF):
         self.line(
             x1=x_line_middle,
             x2=x_line_middle,
-            y1=section_start_y + 48,
+            y1=section_start_y + 42,
             y2=section_start_y,
         )
 
@@ -851,20 +855,20 @@ class Dacte(xFPDF):
         section_start_y += 24
 
         self.rect(
-            x=x_margin, y=section_start_y, w=self.epw - 0.1 * x_margin, h=24, style=""
+            x=x_margin, y=section_start_y, w=self.epw - 0.1 * x_margin, h=18, style=""
         )
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x_line_middle, section_start_y + 2)
+        self.set_xy(x_line_middle, section_start_y + 0.5)
         self.multi_cell(w=0, h=3, text="RECEBEDOR", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x_line_middle + 20, section_start_y + 2)
+        self.set_xy(x_line_middle + 20, section_start_y + 0.5)
         self.multi_cell(w=0, h=3, text=limit_text(self.receb_nome, 48), align="L")
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x_line_middle, section_start_y + 2)
+        self.set_xy(x_line_middle, section_start_y + 0.5)
         self.multi_cell(w=0, h=10, text="ENDEREÇO", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x_line_middle + 20, section_start_y + 2)
+        self.set_xy(x_line_middle + 20, section_start_y + 0.5)
         self.multi_cell(
             w=0,
             h=10.6,
@@ -873,10 +877,10 @@ class Dacte(xFPDF):
         )
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x_line_middle, section_start_y + 2)
+        self.set_xy(x_line_middle, section_start_y + 0.5)
         self.multi_cell(w=0, h=17, text="MUNICÍPIO", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x_line_middle + 20, section_start_y + 2)
+        self.set_xy(x_line_middle + 20, section_start_y + 0.5)
         self.multi_cell(
             w=0,
             h=18.2,
@@ -885,53 +889,53 @@ class Dacte(xFPDF):
         )
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x_line_middle, section_start_y + 2)
+        self.set_xy(x_line_middle, section_start_y + 0.5)
         self.multi_cell(w=0, h=25, text="CNPJ/CPF", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x_line_middle + 20, section_start_y + 2)
+        self.set_xy(x_line_middle + 20, section_start_y + 0.5)
         self.multi_cell(w=0, h=25.8, text=f"{self.receb_cnpj}", align="L")
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x_line_middle, section_start_y + 2)
+        self.set_xy(x_line_middle, section_start_y + 0.5)
         self.multi_cell(w=0, h=32, text="PAÍS", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x_line_middle + 20, section_start_y + 2)
+        self.set_xy(x_line_middle + 20, section_start_y + 0.5)
         self.multi_cell(w=0, h=33.4, text=f"{self.receb_pais}", align="L")
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x_line_middle + 70, section_start_y + 2)
+        self.set_xy(x_line_middle + 70, section_start_y + 0.5)
         self.multi_cell(w=0, h=20, text="CEP", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x_line_middle + 77, section_start_y + 2)
+        self.set_xy(x_line_middle + 77, section_start_y + 0.5)
         if len(self.receb_cep.strip()) == 9:
             self.multi_cell(w=0, h=20, text=f"{self.receb_cep}", align="L")
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x_line_middle + 70, section_start_y + 2)
+        self.set_xy(x_line_middle + 70, section_start_y + 0.5)
         self.multi_cell(w=0, h=27, text="IE", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x_line_middle + 75, section_start_y + 2)
+        self.set_xy(x_line_middle + 75, section_start_y + 0.5)
         self.multi_cell(w=0, h=26.6, text=f"{self.receb_ie}", align="L")
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x_line_middle + 60, section_start_y + 2)
+        self.set_xy(x_line_middle + 60, section_start_y)
         self.multi_cell(w=0, h=34, text="FONE", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x_line_middle + 67, section_start_y + 2)
+        self.set_xy(x_line_middle + 67, section_start_y)
         self.multi_cell(w=0, h=34, text=f"{self.receb_fone}", align="L")
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x=self.l_margin, y=section_start_y + 2)
+        self.set_xy(x=self.l_margin, y=section_start_y + 0.5)
         self.multi_cell(w=0, h=3, text="EXPEDIDOR", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x=self.l_margin + 16, y=section_start_y + 2)
+        self.set_xy(x=self.l_margin + 16, y=section_start_y + 0.5)
         self.multi_cell(w=0, h=3, text=limit_text(self.exped_nome, 48), align="L")
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x=self.l_margin, y=section_start_y + 2)
+        self.set_xy(x=self.l_margin, y=section_start_y + 0.5)
         self.multi_cell(w=0, h=10, text="ENDEREÇO", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x=self.l_margin + 16, y=section_start_y + 2)
+        self.set_xy(x=self.l_margin + 16, y=section_start_y + 0.5)
         self.multi_cell(
             w=0,
             h=10.6,
@@ -940,10 +944,10 @@ class Dacte(xFPDF):
         )
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x=self.l_margin, y=section_start_y + 2)
+        self.set_xy(x=self.l_margin, y=section_start_y + 0.5)
         self.multi_cell(w=0, h=17, text="MUNICÍPIO", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x=self.l_margin + 16, y=section_start_y + 2)
+        self.set_xy(x=self.l_margin + 16, y=section_start_y + 0.5)
         self.multi_cell(
             w=0,
             h=18.2,
@@ -952,50 +956,64 @@ class Dacte(xFPDF):
         )
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x=self.l_margin, y=section_start_y + 2)
+        self.set_xy(x=self.l_margin, y=section_start_y + 0.5)
         self.multi_cell(w=0, h=25, text="CNPJ/CPF", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x=self.l_margin + 16, y=section_start_y + 2)
+        self.set_xy(x=self.l_margin + 16, y=section_start_y + 0.5)
         self.multi_cell(w=0, h=25.8, text=f"{self.exped_cnpj}", align="L")
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x=self.l_margin, y=section_start_y + 2)
+        self.set_xy(x=self.l_margin, y=section_start_y + 0.5)
         self.multi_cell(w=0, h=32, text="PAÍS", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x=self.l_margin + 16, y=section_start_y + 2)
+        self.set_xy(x=self.l_margin + 16, y=section_start_y + 0.5)
         self.multi_cell(w=0, h=33.4, text=f"{self.exped_pais}", align="L")
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x_line_middle - 25, section_start_y + 2)
+        self.set_xy(x_line_middle - 25, section_start_y + 0.5)
         self.multi_cell(w=0, h=20, text="CEP", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x_line_middle - 18, section_start_y + 2)
+        self.set_xy(x_line_middle - 18, section_start_y + 0.5)
         if len(self.exped_cep.strip()) == 9:
             self.multi_cell(w=0, h=20, text=f"{self.exped_cep}", align="L")
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x_line_middle - 25, section_start_y + 2)
+        self.set_xy(x_line_middle - 25, section_start_y + 0.5)
         self.multi_cell(w=0, h=27, text="IE", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x_line_middle - 20, section_start_y + 2)
+        self.set_xy(x_line_middle - 20, section_start_y + 0.5)
         self.multi_cell(w=0, h=27, text=f"{self.exped_ie}", align="L")
 
         self.set_font(self.default_font, "", 7)
-        self.set_xy(x_line_middle - 29, section_start_y + 2)
+        self.set_xy(x_line_middle - 29, section_start_y)
         self.multi_cell(w=0, h=34, text="FONE", align="L")
         self.set_font(self.default_font, "B", 7)
-        self.set_xy(x_line_middle - 20, section_start_y + 2)
+        self.set_xy(x_line_middle - 20, section_start_y)
         self.multi_cell(w=0, h=34, text=f"{self.exped_fone}", align="L")
+
+        section_start_y += 18
+        self.rect(
+            x=x_margin, y=section_start_y, w=self.epw - 0.1 * x_margin, h=6, style=""
+        )
+        self.set_font(self.default_font, "", 7)
+        self.set_xy(self.l_margin, section_start_y + 2)
+        self.multi_cell(w=0, h=2, text="PRODUTO PREDOMINATE", align="L")
+
+        self.set_font(self.default_font, "B", 6.5)
+        self.set_xy(self.l_margin + 32, section_start_y + 2)
+        self.multi_cell(w=0, h=2, text=limit_text(self.prod_pre, 70), align="L")
+
+        self.set_font(self.default_font, "", 7)
+        self.set_xy(x_line_middle + 40, section_start_y + 2)
+        self.multi_cell(w=0, h=2, text="VALOR TOTAL DA CARGA", align="L")
+
+        self.set_font(self.default_font, "B", 7)
+        self.set_xy(x_line_middle + 72, section_start_y + 2)
+        self.multi_cell(w=0, h=2, text=f"R$ {self.v_total_carga}", align="L")
 
     def _draw_service_recipient(self, config):
         self.inf_carga_nome = extract_text(self.inf_carga, "proPred")
         self.inf_carga_car = extract_text(self.inf_carga, "xOutCat")
-        self.inf_carga_valor = format_number(
-            extract_text(self.inf_carga, "vCarga"), precision=2
-        )
-        self.inf_carga_peso = format_number(
-            extract_text(self.inf_carga, "qCarga"), precision=2
-        )
 
         self.inf_unid = extract_text(self.inf_carga, "cUnid")
 
