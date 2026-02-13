@@ -66,6 +66,7 @@ class Danfe(xFPDF):
         self.quantity_precision = config.decimal_config.quantity_precision
         self.invoice_display = config.invoice_display
         self.display_pis_cofins = config.display_pis_cofins
+        self.infcpl_semicolon_newline = config.infcpl_semicolon_newline
         self.product_description_config = config.product_description_config
         self.watermark_cancelled = config.watermark_cancelled
 
@@ -129,10 +130,10 @@ class Danfe(xFPDF):
         with self._disable_writing():
             add_data_lines, max_add_data_lines = self._draw_additional_data(addit_data)
         addit_data_current_page = add_data_lines[:max_add_data_lines]
-        addit_data_current_page = " ".join(addit_data_current_page)
+        join_char = "\n" if self.infcpl_semicolon_newline else " "
+        addit_data_current_page = join_char.join(addit_data_current_page)
         addit_data_next_pages = add_data_lines[max_add_data_lines:]
-        addit_data_next_pages = " ".join(addit_data_next_pages)
-
+        addit_data_next_pages = join_char.join(addit_data_next_pages)
         with self._disable_writing():
             y_before = self.y
             self._draw_header()
@@ -244,9 +245,10 @@ class Danfe(xFPDF):
                     addit_data_next_pages, height_additional_data
                 )
             addit_data_current_page = add_data_lines[:max_add_data_lines]
-            addit_data_current_page = " ".join(addit_data_current_page)
+            join_char = "\n" if self.infcpl_semicolon_newline else " "
+            addit_data_current_page = join_char.join(addit_data_current_page)
             addit_data_next_pages = add_data_lines[max_add_data_lines:]
-            addit_data_next_pages = " ".join(addit_data_next_pages)
+            addit_data_next_pages = join_char.join(addit_data_next_pages)
             self._draw_additional_data(addit_data_current_page, height_additional_data)
 
     @property
@@ -406,7 +408,11 @@ class Danfe(xFPDF):
             obs += "Complemento do destinatário: " + cpl + "."
         if fisco:
             obs = f"{obs} {fisco}\n"
-        obs = " ".join(re.split(r"\s+", obs.strip(), flags=re.UNICODE))
+
+        if self.infcpl_semicolon_newline:
+            obs = obs.replace(";", "\n")
+        else:
+            obs = " ".join(re.split(r"\s+", obs.strip(), flags=re.UNICODE))
         return obs
 
     def _calculate_product_splits(self, products, height_product_table):
@@ -479,12 +485,14 @@ class Danfe(xFPDF):
                 if len(current_add_info_lines) > max_add_info_lines:
                     # split
                     addit_data = current_add_info_lines[:max_add_info_lines]
-                    addit_data = " ".join(addit_data)
+                    join_char = "\n" if self.infcpl_semicolon_newline else " "
+                    addit_data = join_char.join(addit_data)
                     addit_data_next_pages = current_add_info_lines[max_add_info_lines:]
-                    addit_data_next_pages = " ".join(addit_data_next_pages)
+                    addit_data_next_pages = join_char.join(addit_data_next_pages)
                 else:
                     # not split
-                    addit_data = " ".join(current_add_info_lines)
+                    join_char = "\n" if self.infcpl_semicolon_newline else " "
+                    addit_data = join_char.join(current_add_info_lines)
                     addit_data_next_pages = []
         return addit_data, addit_data_next_pages
 

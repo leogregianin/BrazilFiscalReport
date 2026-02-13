@@ -68,6 +68,7 @@ class DanfeConfig:
     font_size: FontSize = FontSize.SMALL
     display_pis_cofins: bool = False
     watermark_cancelled: bool = False
+    infcpl_semicolon_newline: bool = False
     product_description_config: ProductDescriptionConfig = field(
         default_factory=ProductDescriptionConfig
     )

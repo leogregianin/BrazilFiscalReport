@@ -150,6 +150,19 @@ Here is a breakdown of all the configuration options available in `DanfeConfig`:
 
 ---
 
+**Line break in supplementary information**
+
+- **Type**: `Bool`
+- **Values**: `True`, `False`
+- **Description**: Break the line using";" in the supplementary information (infCpl) of the DANFE.
+- **Example**:
+    ```python
+    config.infcpl_semicolon_newline= True
+    ```
+- **Default**: `False`
+
+---
+
 **Product Description Config**
 
 - **Type**: `ProductDescriptionConfig`

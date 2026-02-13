@@ -252,3 +252,25 @@ def test_danfe_big_font_size(tmp_path, load_danfe):
     danfe = load_danfe("nfe_big_font_size.xml", config=config)
     pdf_path = get_pdf_output_path("danfe", "danfe_big_font_size")
     assert_pdf_equal(danfe, pdf_path, tmp_path)
+
+
+def test_danfe_infcpl_semicolon_newline(tmp_path, load_danfe):
+    config = DanfeConfig(
+        margins=Margins(top=2, right=2, bottom=2, left=2),
+        product_description_config=ProductDescriptionConfig(
+            display_anvisa=True,
+            display_additional_info=False,
+            display_branch=True,
+            branch_info_prefix="=>",
+            display_anp=True,
+        ),
+        decimal_config=DecimalConfig(
+            price_precision=3,
+            quantity_precision=2,
+        ),
+        font_size=FontSize.BIG,
+        infcpl_semicolon_newline=True,
+    )
+    danfe = load_danfe("nfe_semicolon_line_break.xml", config=config)
+    pdf_path = get_pdf_output_path("danfe", "danfe_infcpl_semicolon_newline")
+    assert_pdf_equal(danfe, pdf_path, tmp_path)
