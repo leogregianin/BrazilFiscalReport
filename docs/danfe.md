@@ -1,27 +1,29 @@
 DANFE (Auxiliary Document of the Electronic Invoice) is a printed representation of the NF-e (Electronic Invoice) used in Brazil. It contains key details about the transaction, such as the seller, buyer, products, and taxes.
 
-## Using in Python Code 🐍
+## Basic Usage
 
-```python
-from brazilfiscalreport.danfe import Danfe
+=== "Python"
 
-# Path to the XML file
-xml_file_path = 'nfe.xml'
+    ```python
+    from brazilfiscalreport.danfe import Danfe
 
-# Load XML Content
-with open(xml_file_path, "r", encoding="utf8") as file:
-    xml_content = file.read()
+    # Path to the XML file
+    xml_file_path = 'nfe.xml'
 
-# Instantiate the DANFE object with the loaded XML content
-danfe = Danfe(xml=xml_content)
-danfe.output('output_danfe.pdf')
-```
+    # Load XML Content
+    with open(xml_file_path, "r", encoding="utf8") as file:
+        xml_content = file.read()
 
-## Using in CLI 💻
+    # Instantiate the DANFE object with the loaded XML content
+    danfe = Danfe(xml=xml_content)
+    danfe.output('output_danfe.pdf')
+    ```
 
-```
-bfrep danfe /path/to/nfe.xml
-```
+=== "CLI"
+
+    ```bash
+    bfrep danfe /path/to/nfe.xml
+    ```
 
 ## Customizing DANFE 🎨
 
@@ -93,7 +95,9 @@ Here is a breakdown of all the configuration options available in `DanfeConfig`:
     config.receipt_pos = ReceiptPosition.BOTTOM
     ```
 - **Default**: `TOP` when portrait, `LEFT` when landscape orientation.
-- **Note**: In landscape orientation, the receipt position is far left; customization is not permitted.
+
+!!! note
+    In landscape orientation, the receipt position is far left; customization is not permitted.
 
 ---
 
@@ -113,14 +117,16 @@ Here is a breakdown of all the configuration options available in `DanfeConfig`:
 **Tax Configuration**
 
 - **Type**: `TaxConfiguration` (Enum)
-- **Values**: `STANDARD_ICMS_IPI`, `ICMS_ST_ONLY`, `WITHOUT_IPI`
+- **Values**: `STANDARD_ICMS_IPI`, `ICMS_ST`, `WITHOUT_IPI`
 - **Description**: Specifies which tax fields to display.
 - **Example**:
     ```python
     config.tax_configuration = TaxConfiguration.WITHOUT_IPI
     ```
 - **Default**: `STANDARD_ICMS_IPI`
-- **Warning**: This feature is not yet implemented.
+
+!!! warning
+    This feature is not yet implemented.
 
 ---
 
@@ -166,37 +172,40 @@ Here is a breakdown of all the configuration options available in `DanfeConfig`:
 **Product Description Config**
 
 - **Type**: `ProductDescriptionConfig`
-- **Fields**: `display_branch`, `branch_info_prefix`, `display_additional_info`, `display_anvisa`, `display_anp`.
-- **Description**: Whether or not to display the product branch in the DANFE product description.
+- **Fields**: `display_branch` (`bool`), `display_anp` (`bool`), `display_anvisa` (`bool`), `branch_info_prefix` (`str`), `display_additional_info` (`bool`)
+- **Description**: Controls what additional information is displayed in the product description column of the DANFE.
 - **Example**:
     ```python
-    config.display_branch = True
-    config.branch_info_prefix = '=>'
-    config.display_additional_info = True
-    config.display_anp = True
-    config.display_anvisa = True
+    config.product_description_config = ProductDescriptionConfig(
+        display_branch=True,
+        branch_info_prefix="=>",
+        display_additional_info=True,
+        display_anp=True,
+        display_anvisa=True,
+    )
     ```
 - **Default**:
     ```python
-    config.display_branch = False
-    config.branch_info_prefix = ""
-    config.display_additional_info = True
-    config.display_anp = False
-    config.display_anvisa = False
+    ProductDescriptionConfig(
+        display_branch=False,
+        display_anp=False,
+        display_anvisa=False,
+        branch_info_prefix="",
+        display_additional_info=True,
+    )
     ```
 
 ---
 
-**Watermark cancelled**
+**Watermark Cancelled**
 
-- **Type**: `Bool`
-- **Description**: Indicates whether the "CANCELADA" watermark should be displayed on the DANFE for a cancelled invoice.
-    It also generates a watermark for XML files without the `protNfe` tag.
+- **Type**: `bool`
+- **Description**: When set to `True`, displays a "CANCELADA" watermark on the DANFE for cancelled invoices. For XML files without the `protNFe` tag, a "SEM VALOR FISCAL" watermark is displayed regardless of this setting.
 - **Example**:
     ```python
     config.watermark_cancelled = True
     ```
-- **Default**: `SEM VALOR FISCAL`.
+- **Default**: `False`
 
 ---
 
@@ -212,6 +221,7 @@ from brazilfiscalreport.danfe import (
     FontType,
     InvoiceDisplay,
     Margins,
+    ProductDescriptionConfig,
     ReceiptPosition,
     TaxConfiguration,
 )
@@ -231,7 +241,12 @@ config = DanfeConfig(
     decimal_config=DecimalConfig(price_precision=2, quantity_precision=2),
     tax_configuration=TaxConfiguration.ICMS_ST,
     invoice_display=InvoiceDisplay.FULL_DETAILS,
-    font_type=FontType.TIMES
+    font_type=FontType.TIMES,
+    display_pis_cofins=True,
+    product_description_config=ProductDescriptionConfig(
+        display_branch=True,
+        display_additional_info=True,
+    ),
 )
 
 # Use this config when creating a Danfe instance

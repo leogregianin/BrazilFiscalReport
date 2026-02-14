@@ -1,32 +1,35 @@
-DAMDFE (Auxiliary Document of the Electronic Invoice for Retail) is a printed version of the Electronic Retail Invoice (NF-e) in Brazil. It contains key information about the transaction, such as the seller, buyer, and item details, and is used as proof of purchase.
+DAMDFE (Auxiliary Document of the Electronic Manifest of Fiscal Documents) is a printed representation of the MDF-e (Electronic Manifest of Fiscal Documents) used in Brazil. It consolidates information about the transportation of goods, linking multiple CT-e or NF-e documents to a single transport operation, and is required to accompany the cargo during transit.
 
-## Using in Python Code 🐍
+## Basic Usage
 
-```python
-from brazilfiscalreport.damdfe import Damdfe
+=== "Python"
 
-# Path to the XML file
-xml_file_path = 'damdfe.xml'
+    ```python
+    from brazilfiscalreport.damdfe import Damdfe
 
-# Load XML Content
-with open(xml_file_path, "r", encoding="utf8") as file:
-    xml_content = file.read()
+    # Path to the XML file
+    xml_file_path = 'mdfe.xml'
 
-# Instantiate the DAMDFE object with the loaded XML content
-damdfe = Damdfe(xml=xml_content)
+    # Load XML Content
+    with open(xml_file_path, "r", encoding="utf8") as file:
+        xml_content = file.read()
 
-# Save the generated PDF to a file
-damdfe.output('damdfe.pdf')
-```
+    # Instantiate the DAMDFE object with the loaded XML content
+    damdfe = Damdfe(xml=xml_content)
 
-## Using in CLI 💻
+    # Save the generated PDF to a file
+    damdfe.output('damdfe.pdf')
+    ```
 
-```
-bfrep damdfe /path/to/cce_1.xml
-```
+=== "CLI"
+
+    ```bash
+    bfrep damdfe /path/to/mdfe.xml
+    ```
+
 ## Customizing DAMDFE 🎨
 
-This section describes how to customize the PDF output of the DAMDFE using the `DamdfeConfig` class. You can adjust various settings such as margins, fonts, and tax configurations according to your needs.
+This section describes how to customize the PDF output of the DAMDFE using the `DamdfeConfig` class. You can adjust various settings such as margins, fonts, and decimal precision according to your needs.
 
 ### Configuration Options ⚙️
 
@@ -59,6 +62,19 @@ Here is a breakdown of all the configuration options available in `DamdfeConfig`
 
 ---
 
+**Decimal Configuration**
+
+- **Type**: `DecimalConfig`
+- **Fields**: `price_precision`, `quantity_precision` (both `int`)
+- **Description**: Defines the number of decimal places for prices and quantities.
+- **Example**:
+    ```python
+    config.decimal_config = DecimalConfig(price_precision=2, quantity_precision=2)
+    ```
+- **Default**: `4` for both fields.
+
+---
+
 **Font Type**
 
 - **Type**: `FontType` (Enum)
@@ -74,18 +90,19 @@ Here is a breakdown of all the configuration options available in `DamdfeConfig`
 
 ### Usage Example with Customization
 
-Here’s how to set up a DamdfeConfig object with a full set of customizations:
+Here's how to set up a DamdfeConfig object with a full set of customizations:
 
 ```python
 from brazilfiscalreport.damdfe import (
     Damdfe,
     DamdfeConfig,
+    DecimalConfig,
     FontType,
     Margins,
 )
 
 # Path to the XML file
-xml_file_path = 'mdf-e.xml'
+xml_file_path = 'mdfe.xml'
 
 # Load XML Content
 with open(xml_file_path, "r", encoding="utf8") as file:
@@ -95,7 +112,8 @@ with open(xml_file_path, "r", encoding="utf8") as file:
 config = DamdfeConfig(
     logo='path/to/logo.png',
     margins=Margins(top=10, right=10, bottom=10, left=10),
-    font_type=FontType.TIMES
+    decimal_config=DecimalConfig(price_precision=2, quantity_precision=2),
+    font_type=FontType.TIMES,
 )
 
 # Use this config when creating a Damdfe instance
