@@ -20,6 +20,6 @@ jobs:
           python-version: '3.x'
           cache: 'pip'
       - name: Install dependencies
-        run: pip install mkdocs-material
+        run: pip install mkdocs-material mkdocs-static-i18n
       - name: Build and Deploy MkDocs site
         run: mkdocs gh-deploy --force
