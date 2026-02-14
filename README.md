@@ -12,7 +12,7 @@
 
 Python library for generating Brazilian auxiliary fiscal documents in PDF from XML documents.
 
-**[Documentation](https://engenere.github.io/BrazilFiscalReport/)** | **[PyPI](https://pypi.org/project/BrazilFiscalReport/)**
+**[Documentation](https://engenere.github.io/BrazilFiscalReport/)** | **[PyPI](https://pypi.org/project/BrazilFiscalReport/)** | **[Try it Online](https://brazilfiscalreport.streamlit.app)**
 
 ## Supported Documents
 
