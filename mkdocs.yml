@@ -1,29 +1,54 @@
 site_name: BrazilFiscalReport
-site_url: https://github.com/Engenere/BrazilFiscalReport
+site_url: https://engenere.github.io/BrazilFiscalReport/
+repo_url: https://github.com/Engenere/BrazilFiscalReport
+repo_name: Engenere/BrazilFiscalReport
 
 theme:
   name: material
   palette:
-    scheme: slate
-    toggle:
-      name: Switch to light mode
+    - scheme: slate
+      primary: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
   font:
     text: Roboto
     code: Roboto Mono
   features:
     - navigation.tabs
+    - navigation.sections
+    - navigation.top
     - header.autohide
     - search.highlight
     - search.share
-    - navigation.top
+    - content.code.copy
   logo: 'favicon.ico'
   favicon: 'favicon.ico'
 
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+
 nav:
   - Home: index.md
-  - CLI : cli.md
-  - DANFE: danfe.md
-  - DACTE: dacte.md
-  - DAMDFE: damdfe.md
-  - DACCe: dacce.md
+  - Getting Started: getting-started.md
+  - Documents:
+      - DANFE: danfe.md
+      - DACTE: dacte.md
+      - DAMDFE: damdfe.md
+      - DACCe: dacce.md
+  - CLI: cli.md
+  - Changelog: changelog.md
+  - Contributing: contributing.md
   - About: about.md

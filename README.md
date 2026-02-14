@@ -4,7 +4,7 @@
 [![pypi](https://img.shields.io/pypi/v/brazilfiscalreport.svg)](https://pypi.org/project/BrazilFiscalReport/)
 [![license](https://img.shields.io/github/license/Engenere/BrazilFiscalReport)](https://github.com/Engenere/BrazilFiscalReport/blob/main/LICENSE)
 [![contributors](https://img.shields.io/github/contributors/Engenere/BrazilFiscalReport)](https://github.com/Engenere/BrazilFiscalReport/graphs/contributors)
-![status-beta](https://img.shields.io/badge/status-beta-orange)
+
 [![pypi-downloads](https://static.pepy.tech/badge/brazilfiscalreport)](https://pepy.tech/projects/brazilfiscalreport)
 
 # Brazil Fiscal Report
@@ -17,10 +17,6 @@ Python library for generating Brazilian auxiliary fiscal documents in PDF from X
 - **DACCe** - Documento Auxiliar da Carta de Correção Eletrônica (CC-e)
 - **DACTE** - Documento Auxiliar do Conhecimento de Transporte Eletrônico (CT-e)
 - **DAMDFE** - Documento Auxiliar do Manifesto Eletrônico de Documentos Fiscais (MDF-e)
-
-## Beta Stage Notice 🚧
-
-This library is currently in the beta stage of development. While it has many of the intended features implemented, it is still undergoing testing and improvements. Users should note that during this phase, functionality may change and some instability may occur. We welcome feedback on any issues or suggestions for enhancements. Use in production environments should be approached with caution.
 
 Check the [documentation](https://engenere.github.io/BrazilFiscalReport/) for more ✨✨✨
 
