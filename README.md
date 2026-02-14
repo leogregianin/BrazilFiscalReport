@@ -4,58 +4,93 @@
 [![pypi](https://img.shields.io/pypi/v/brazilfiscalreport.svg)](https://pypi.org/project/BrazilFiscalReport/)
 [![license](https://img.shields.io/github/license/Engenere/BrazilFiscalReport)](https://github.com/Engenere/BrazilFiscalReport/blob/main/LICENSE)
 [![contributors](https://img.shields.io/github/contributors/Engenere/BrazilFiscalReport)](https://github.com/Engenere/BrazilFiscalReport/graphs/contributors)
-
 [![pypi-downloads](https://static.pepy.tech/badge/brazilfiscalreport)](https://pepy.tech/projects/brazilfiscalreport)
 
 # Brazil Fiscal Report
 
+![Brazil Fiscal Report - XML to PDF](docs/assets/banner.svg)
+
 Python library for generating Brazilian auxiliary fiscal documents in PDF from XML documents.
 
-## Supported Documents 📄
+**[Documentation](https://engenere.github.io/BrazilFiscalReport/)** | **[PyPI](https://pypi.org/project/BrazilFiscalReport/)**
 
-- **DANFE** - Documento Auxiliar da Nota Fiscal Eletrônica (NF-e)
-- **DACCe** - Documento Auxiliar da Carta de Correção Eletrônica (CC-e)
-- **DACTE** - Documento Auxiliar do Conhecimento de Transporte Eletrônico (CT-e)
-- **DAMDFE** - Documento Auxiliar do Manifesto Eletrônico de Documentos Fiscais (MDF-e)
+## Supported Documents
 
-Check the [documentation](https://engenere.github.io/BrazilFiscalReport/) for more ✨✨✨
+| Document | Description | XML Source |
+|----------|-------------|------------|
+| **DANFE** | Documento Auxiliar da Nota Fiscal Eletrônica | NF-e |
+| **DACCe** | Documento Auxiliar da Carta de Correção Eletrônica | CC-e |
+| **DACTE** | Documento Auxiliar do Conhecimento de Transporte Eletrônico | CT-e |
+| **DAMDFE** | Documento Auxiliar do Manifesto Eletrônico de Documentos Fiscais | MDF-e |
 
-## Dependencies 🛠️
-
-- [FPDF2](https://github.com/py-pdf/fpdf2) - PDF creation library for Python
-- phonenumbers
-- python-barcode
-- qrcode (required for DACTE and DAMDFE)
-
-## To install 🔧
+## Installation
 
 ```bash
 pip install brazilfiscalreport
 ```
 
-## Installing DACTE with Dependencies
-If you specifically need the DACTE functionality, you can install it along with its required dependencies using:
+This installs the core library with support for **DANFE** and **DACCe**. For additional document types and features:
 
 ```bash
-pip install 'brazilfiscalreport[dacte]'
+pip install 'brazilfiscalreport[dacte]'   # DACTE support (requires qrcode)
+pip install 'brazilfiscalreport[damdfe]'  # DAMDFE support (requires qrcode)
+pip install 'brazilfiscalreport[cli]'     # CLI tool
+pip install 'brazilfiscalreport[dacte,damdfe,cli]'  # All extras
 ```
 
-## Installing DAMDFE with Dependencies
-If you specifically need the DAMDFE functionality, you can install it along with its required dependencies using:
+## Quick Start
+
+```python
+from brazilfiscalreport.danfe import Danfe
+
+with open("nfe.xml", "r", encoding="utf8") as file:
+    xml_content = file.read()
+
+danfe = Danfe(xml=xml_content)
+danfe.output("danfe.pdf")
+```
+
+The same pattern applies to all document types:
+
+```python
+from brazilfiscalreport.dacte import Dacte
+from brazilfiscalreport.damdfe import Damdfe
+from brazilfiscalreport.dacce import DaCCe
+
+dacte = Dacte(xml=cte_xml)
+dacte.output("dacte.pdf")
+
+damdfe = Damdfe(xml=mdfe_xml)
+damdfe.output("damdfe.pdf")
+
+dacce = DaCCe(xml=cce_xml)
+dacce.output("dacce.pdf")
+```
+
+## CLI
+
+Generate PDFs directly from the terminal:
 
 ```bash
-pip install 'brazilfiscalreport[damdfe]'
+bfrep danfe /path/to/nfe.xml
+bfrep dacte /path/to/cte.xml
+bfrep damdfe /path/to/mdfe.xml
+bfrep dacce /path/to/cce.xml
 ```
 
-### Installing CLI with Dependencies
-If you specifically need the CLI functionality, you can install it along with its required dependencies using:
+See the [CLI documentation](https://engenere.github.io/BrazilFiscalReport/cli/) for configuration options.
 
-```bash
-pip install 'brazilfiscalreport[cli]'
-```
+## Dependencies
 
-## Credits 🙌
+- [FPDF2](https://github.com/py-pdf/fpdf2) - PDF creation library for Python
+- [phonenumbers](https://github.com/daviddrysdale/python-phonenumbers) - Phone number formatting
+- [python-barcode](https://github.com/WhyNotHugo/python-barcode) - Barcode generation
+- [qrcode](https://github.com/lincolnloop/python-qrcode) - QR code generation (required for DACTE and DAMDFE)
+
+## Credits
+
 This is a fork of the [nfe_utils](https://github.com/edsonbernar/nfe_utils) project, originally created by [Edson Bernardino](https://github.com/edsonbernar).
 
-## Maintainer 🛠️
-[![Engenere](https://storage.googleapis.com/eng-imagens/logo-fundo-preto.webp)]([#](https://engenere.one/))
+## Maintainer
+
+[![Engenere](https://storage.googleapis.com/eng-imagens/logo-fundo-preto.webp)](https://engenere.one/)
