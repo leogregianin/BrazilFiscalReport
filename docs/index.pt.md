@@ -34,6 +34,12 @@ Para geração rápida de PDF pelo terminal com um simples arquivo `config.yaml`
 
 [Documentação do CLI :material-arrow-right:](cli.md){ .md-button }
 
+### 3. Teste Online
+
+Faça upload do seu XML fiscal e obtenha o PDF instantaneamente — sem precisar instalar nada.
+
+[Teste online :material-arrow-right:](https://brazilfiscalreport.streamlit.app){ .md-button }
+
 ## Dependências
 
 - [FPDF2](https://github.com/py-pdf/fpdf2) - Biblioteca de criação de PDF para Python
