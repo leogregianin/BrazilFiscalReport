@@ -58,6 +58,7 @@ class Dacte(xFPDF):
         self.price_precision = config.decimal_config.price_precision
         self.quantity_precision = config.decimal_config.quantity_precision
         self.watermark_cancelled = config.watermark_cancelled
+        self.display_ibs_cbs = config.display_ibs_cbs
 
         root = ET.fromstring(xml)
         self.inf_cte = root.find(f"{URL}infCte")
@@ -80,6 +81,7 @@ class Dacte(xFPDF):
         self.compl = root.find(f"{URL}compl") or []
         self.aquav = root.find(f"{URL}aquav")
         self.ferrov = root.find(f"{URL}ferrov")
+        self.imp_ibscbs = root.find(f"{URL}IBSCBS")
 
         self.obs_dacte_list = []
         for obs in self.compl:
@@ -1286,6 +1288,24 @@ class Dacte(xFPDF):
         self.v_icms = format_number(extract_text(self.imp, "vICMS"), precision=2)
         self.v_icms_st = format_number(extract_text(self.imp, "vICMS"), precision=2)
         self.p_red_bc = format_number(extract_text(self.imp, "pRedBC"), precision=2)
+        g_ibscbs = (
+            self.imp_ibscbs.find(f"{URL}gIBSCBS")
+            if self.imp_ibscbs is not None
+            else None
+        )
+        g_uf = g_ibscbs.find(f"{URL}gIBSUF") if g_ibscbs is not None else None
+        g_mun = g_ibscbs.find(f"{URL}gIBSMun") if g_ibscbs is not None else None
+        g_cbs = g_ibscbs.find(f"{URL}gCBS") if g_ibscbs is not None else None
+        self.p_ibs_uf = format_number(extract_text(g_uf, "pIBSUF") or "0", precision=2)
+        self.v_ibs_uf = format_number(extract_text(g_uf, "vIBSUF") or "0", precision=2)
+        self.p_ibs_mun = format_number(
+            extract_text(g_mun, "pIBSMun") or "0", precision=2
+        )
+        self.v_ibs_mun = format_number(
+            extract_text(g_mun, "vIBSMun") or "0", precision=2
+        )
+        self.p_cbs = format_number(extract_text(g_cbs, "pCBS") or "0", precision=2)
+        self.v_cbs = format_number(extract_text(g_cbs, "vCBS") or "0", precision=2)
         self.rntrc = extract_text(self.inf_modal, "RNTRC")
         self.x_obs = extract_text(self.compl, "compl")
         self.v_tpprest = format_number(
@@ -1373,15 +1393,22 @@ class Dacte(xFPDF):
             section_start_y, 18, "INFORMAÇÕES RELATIVAS AO IMPOSTO"
         )
         self.cst_desc = TP_ICMS[extract_text(self.imp, "CST")]
+        total_width = page_width - 0.1 * x_margin
         self.rect(
             x=x_margin,
             y=section_start_y - 15,
-            w=page_width - 0.1 * x_margin,
+            w=total_width,
             h=15,
             style="",
         )
 
-        col_width = (page_width - 2 * x_margin) / 6
+        if self.display_ibs_cbs:
+            ibs_width = total_width * 0.15
+            col_width = (total_width - ibs_width) / 6
+        else:
+            col_width = total_width / 6
+            ibs_width = 0
+
         for i in range(1, 6):
             x_line = x_margin + i * col_width
             self.line(x1=x_line, x2=x_line, y1=section_start_y - 15, y2=section_start_y)
@@ -1410,6 +1437,38 @@ class Dacte(xFPDF):
             self.set_xy(x_margin + i * col_width, section_start_y - 11)
             self.multi_cell(w=col_width, h=4, text=value, align="L")
             self.set_font(self.default_font, "", 6)
+
+        if self.display_ibs_cbs:
+            col_ibs = x_margin + 6 * col_width
+            self.set_font(self.default_font, "", 6)
+            self.line(
+                x1=col_ibs,
+                x2=col_ibs,
+                y1=section_start_y - 15,
+                y2=section_start_y,
+            )
+            self.set_xy(col_ibs, section_start_y - 15)
+            self.multi_cell(w=ibs_width, h=4, text="IBS E CBS", align="L")
+            self.set_font(self.default_font, "B", 4.8)
+            valor_area_h = 11
+            line_h = valor_area_h / 3
+            y_start = section_start_y - 15 + 4
+            w_label = ibs_width * 0.58
+            w_val = ibs_width * 0.21
+            ibs_rows = [
+                ("IBS ESTADUAL (%/R$)", self.p_ibs_uf, self.v_ibs_uf),
+                ("IBS MUNICIPAL (%/R$)", self.p_ibs_mun, self.v_ibs_mun),
+                ("CBS (%/R$)", self.p_cbs, self.v_cbs),
+            ]
+            for i, (label, pct, val) in enumerate(ibs_rows):
+                y_row = y_start + i * line_h
+                self.set_xy(col_ibs, y_row)
+                self.cell(w=w_label, h=line_h, text=label, align="L")
+                self.set_xy(col_ibs + w_label + 0.8, y_row)
+                self.cell(w=w_val, h=line_h, text=pct, align="R")
+                self.set_xy(col_ibs + w_label + w_val + 1, y_row)
+                self.cell(w=w_val, h=line_h, text=val, align="R")
+            self.set_xy(col_ibs + w_label + w_val + 0.8, y_row - 3.2)
 
     def _draw_documents_obs(self):
         x_margin = self.l_margin
