@@ -47,3 +47,4 @@ class DacteConfig:
     decimal_config: DecimalConfig = field(default_factory=DecimalConfig)
     font_type: FontType = FontType.TIMES
     watermark_cancelled: bool = False
+    display_ibs_cbs: bool = False
