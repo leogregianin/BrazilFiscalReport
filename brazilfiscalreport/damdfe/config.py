@@ -42,3 +42,4 @@ class DamdfeConfig:
     margins: Margins = field(default_factory=Margins)
     decimal_config: DecimalConfig = field(default_factory=DecimalConfig)
     font_type: FontType = FontType.TIMES
+    display_origem_destino_prestacao: bool = False
