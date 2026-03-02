@@ -1646,6 +1646,8 @@ class Damdfe(xFPDF):
         page_width = self.epw
 
         self.fisco = extract_text(self.inf_adic, "infAdFisco")
+        if self.fisco:
+            self.fisco = self.fisco.replace(";", "\n")
         self.obs = extract_text(self.inf_adic, "infCpl")
         self._build_seg_str()
 
