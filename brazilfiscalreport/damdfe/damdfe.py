@@ -37,6 +37,9 @@ class Damdfe(xFPDF):
     def __init__(self, xml, config: DamdfeConfig = None):
         super().__init__(unit="mm", format="A4")
         self.config = config if config is not None else DamdfeConfig()
+        self.display_origem_destino_prestacao = (
+            self.config.display_origem_destino_prestacao
+        )
         self.set_margins(
             left=self.config.margins.left,
             top=self.config.margins.top,
@@ -1462,7 +1465,36 @@ class Damdfe(xFPDF):
         self.set_xy(x=x_margin, y=y_middle + 1.5)
         self.set_font(self.default_font, "", 6.5)
         self.percurso_str = self._build_percurso_str()
-        self.multi_cell(w=100, h=0, text=self.percurso_str, border=0, align="L")
+
+        if self.display_origem_destino_prestacao:
+            origem_prestacao = ""
+            destino_prestacao = ""
+
+            inf_mun_carrega = self.ide.find(f"{URL}infMunCarrega")
+            if inf_mun_carrega is not None:
+                origem_prestacao = extract_text(inf_mun_carrega, "xMunCarrega")
+
+            destinos = []
+            if self.inf_doc is not None:
+                for mun_descarga in self.inf_doc.findall(f"{URL}infMunDescarga"):
+                    xmun = extract_text(mun_descarga, "xMunDescarga")
+                    if xmun and xmun not in destinos:
+                        destinos.append(xmun)
+            if destinos:
+                destino_prestacao = " / ".join(destinos)
+
+            partes_percurso = []
+            if self.percurso_str:
+                partes_percurso.append(self.percurso_str)
+            if origem_prestacao:
+                partes_percurso.append(f"ORIGEM DA PRESTAÇÃO: {origem_prestacao}")
+            if destino_prestacao:
+                partes_percurso.append(f"DESTINO DA PRESTAÇÃO: {destino_prestacao}")
+
+            texto_percurso = " | ".join(partes_percurso) if partes_percurso else ""
+            self.multi_cell(w=200, h=0, text=texto_percurso, border=0, align="L")
+        else:
+            self.multi_cell(w=200, h=0, text=self.percurso_str, border=0, align="L")
 
         y_middle = (
             y_margin + 35.5
