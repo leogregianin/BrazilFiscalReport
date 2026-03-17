@@ -61,7 +61,11 @@ class Danfe(xFPDF):
         self.logo_image = config.logo
         self.receipt_pos = config.receipt_pos
         self.default_font = config.font_type.value
-        self.default_font_factor = config.font_size.value
+        self.default_font_factor = (
+            config.font_size.value
+            if self.default_font == "Times"
+            else config.font_size.SMALL.value
+        )
         self.price_precision = config.decimal_config.price_precision
         self.quantity_precision = config.decimal_config.quantity_precision
         self.invoice_display = config.invoice_display
@@ -500,7 +504,7 @@ class Danfe(xFPDF):
         if self.default_font_factor is FontSize.SMALL.value:
             return (15, None, 11, cst_width, 7, 6, 12, 13, 13, 13, 10, 10, 9, 8)
         elif self.default_font_factor is FontSize.BIG.value:
-            return (15, None, 14, 8, 8, 8, 12, 13, 13, 14, 13, 10, 9, 8)
+            return (15, None, 14, 8, 8, 8, 12, 13, 15, 14, 13, 10, 9, 9)
 
         raise ValueError(f"Unsupported FontSize: {self.default_font_factor}")
 
@@ -885,7 +889,10 @@ class Danfe(xFPDF):
 
         block_dest.add_field(
             DanfeBasicField(
-                w=w_dest_end, description="ENDEREÇO", content=dest_end, pdf=self
+                w=w_dest_end,
+                description="ENDEREÇO",
+                content=self.long_field(text=dest_end, limit=100),
+                pdf=self,
             )
         )
         block_dest.add_field(
@@ -1029,7 +1036,7 @@ class Danfe(xFPDF):
             DanfeBasicField(
                 w=widths["line2"]["endereco"],
                 description="ENDEREÇO",
-                content=endereco,
+                content=self.long_field(text=endereco, limit=100),
                 pdf=self,
             )
         )
@@ -1315,7 +1322,11 @@ class Danfe(xFPDF):
         ]
 
         fields_line2 = [
-            BaseFieldInfo(w=0, description="ENDEREÇO", content=ender),
+            BaseFieldInfo(
+                w=0,
+                description="ENDEREÇO",
+                content=self.long_field(text=ender, limit=50),
+            ),
             BaseFieldInfo(w=69, description="MUNICÍPIO", content=municipio),
             BaseFieldInfo(w=8, description="UF", content=uf),
             BaseFieldInfo(w=30, description="INSCRIÇÃO ESTADUAL", content=ie),
