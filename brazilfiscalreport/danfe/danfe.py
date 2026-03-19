@@ -891,7 +891,11 @@ class Danfe(xFPDF):
             DanfeBasicField(
                 w=w_dest_end,
                 description="ENDEREÇO",
-                content=self.long_field(text=dest_end, limit=100),
+                content=self.long_field(
+                    text=dest_end,
+                    limit=w_dest_end,
+                    font_size=self.get_font_size("FONT_SIZE_CONT", True),
+                ),
                 pdf=self,
             )
         )
@@ -1036,7 +1040,11 @@ class Danfe(xFPDF):
             DanfeBasicField(
                 w=widths["line2"]["endereco"],
                 description="ENDEREÇO",
-                content=self.long_field(text=endereco, limit=100),
+                content=self.long_field(
+                    text=endereco,
+                    limit=widths["line2"]["endereco"],
+                    font_size=self.get_font_size("FONT_SIZE_CONT", True),
+                ),
                 pdf=self,
             )
         )
@@ -1321,15 +1329,24 @@ class Danfe(xFPDF):
             BaseFieldInfo(w=30, description="CNPJ / CPF", content=cnpj_cpf),
         ]
 
+        w_transp_mun = 69
+        w_transp_uf = 8
+        w_transp_ie = 30
+        w_transp_ender = block_transporte.w - w_transp_mun - w_transp_uf - w_transp_ie
+
         fields_line2 = [
             BaseFieldInfo(
                 w=0,
                 description="ENDEREÇO",
-                content=self.long_field(text=ender, limit=50),
+                content=self.long_field(
+                    text=ender,
+                    limit=w_transp_ender,
+                    font_size=self.get_font_size("FONT_SIZE_CONT", True),
+                ),
             ),
-            BaseFieldInfo(w=69, description="MUNICÍPIO", content=municipio),
-            BaseFieldInfo(w=8, description="UF", content=uf),
-            BaseFieldInfo(w=30, description="INSCRIÇÃO ESTADUAL", content=ie),
+            BaseFieldInfo(w=w_transp_mun, description="MUNICÍPIO", content=municipio),
+            BaseFieldInfo(w=w_transp_uf, description="UF", content=uf),
+            BaseFieldInfo(w=w_transp_ie, description="INSCRIÇÃO ESTADUAL", content=ie),
         ]
 
         fields_line3 = [
