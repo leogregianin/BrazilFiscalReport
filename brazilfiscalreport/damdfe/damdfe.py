@@ -251,6 +251,142 @@ class Damdfe(xFPDF):
             self.text(x_center + 3, y_center + 23, second_part)
         self.set_text_color(r=0, g=0, b=0)
 
+    def _estimate_text_height(self, text, width, line_height):
+        if not text:
+            return line_height
+
+        paragraphs = str(text).split("\n")
+        total_lines = 0
+
+        for paragraph in paragraphs:
+            words = paragraph.split()
+            if not words:
+                total_lines += 1
+                continue
+
+            current_line = words[0]
+            for word in words[1:]:
+                candidate = f"{current_line} {word}"
+                if self.get_string_width(candidate) <= width:
+                    current_line = candidate
+                    continue
+                total_lines += 1
+                current_line = word
+            total_lines += 1
+
+        return max(total_lines, 1) * line_height
+
+    def _ensure_space(self, required_height, current_y):
+        available_height = self.h - self.b_margin
+        if current_y + required_height <= available_height:
+            return current_y
+
+        self.add_page(orientation="P")
+        self._draw_void_watermark()
+        self._draw_contingency_watermark()
+        return self.get_y()
+
+    def _draw_dynamic_text_block(
+        self,
+        title,
+        text,
+        y_start,
+        line_height=3,
+        min_content_height=45,
+        max_content_height=None,
+        allow_page_break=True,
+        overflow_suffix="...",
+    ):
+        x_margin = self.l_margin
+        page_width = self.epw
+        inner_width = page_width - 4
+        header_height = 4
+        text_to_draw = text or ""
+        content_height = max(
+            min_content_height,
+            self._estimate_text_height(text_to_draw, inner_width, line_height) + 1,
+        )
+        if max_content_height is not None:
+            content_height = min(content_height, max_content_height)
+            text_to_draw = self._truncate_text_to_height(
+                text_to_draw,
+                inner_width,
+                line_height,
+                content_height - 1,
+                overflow_suffix,
+            )
+        block_height = header_height + content_height
+
+        if allow_page_break:
+            y_start = self._ensure_space(block_height, y_start)
+
+        self.rect(
+            x=x_margin,
+            y=y_start,
+            w=page_width - 0.5,
+            h=block_height,
+            style="",
+        )
+        y_middle = y_start + header_height
+        self.line(x_margin, y_middle, x_margin + page_width - 0.5, y_middle)
+        self.set_xy(x=(page_width - self.get_string_width(title)) / 2, y=y_middle - 2)
+        self.set_font(self.default_font, "B", 7)
+        self.multi_cell(
+            w=100,
+            h=0,
+            text=title,
+            border=0,
+            align="L",
+        )
+        self.set_font(self.default_font, "", 6)
+        self.set_xy(x=x_margin, y=y_middle)
+        self.multi_cell(
+            w=inner_width,
+            h=line_height,
+            text=text_to_draw,
+            border=0,
+            align="L",
+        )
+        return y_start + block_height
+
+    def _truncate_text_to_height(
+        self, text, width, line_height, max_height, overflow_suffix="..."
+    ):
+        if not text:
+            return ""
+
+        max_lines = int(max_height // line_height)
+        if max_lines <= 0:
+            return "..."
+
+        lines = self.multi_cell(
+            w=width,
+            h=line_height,
+            text=str(text),
+            border=0,
+            align="L",
+            fill=False,
+            split_only=False,
+            dry_run=True,
+            output=("LINES"),
+        )
+
+        if len(lines) <= max_lines:
+            return "\n".join(lines)
+
+        truncated = lines[:max_lines]
+        last_line = truncated[-1].rstrip()
+        suffix = overflow_suffix or ""
+        while (
+            last_line and suffix and self.get_string_width(last_line + suffix) > width
+        ):
+            last_line = last_line[:-1].rstrip()
+        if suffix:
+            truncated[-1] = f"{last_line}{suffix}" if last_line else suffix
+        else:
+            truncated[-1] = last_line
+        return "\n".join(truncated)
+
     def draw_vertical_lines_left(self, start_y, end_y, num_lines=None):
         half_page_width = self.epw / 2 - 0.25
         col_width = half_page_width / num_lines
@@ -1772,30 +1908,13 @@ class Damdfe(xFPDF):
             align="L",
         )
 
-        self.rect(
-            x=x_margin,
-            y=y_margin + 85,
-            w=page_width - 0.5,
-            h=45,
-            style="",
-        )
-        y_middle = y_margin + 90
-        self.line(x_margin, y_middle, x_margin + page_width - 0.5, y_middle)
-        self.set_xy(x=(page_width - 65) / 2, y=y_middle - 2)
-        self.set_font(self.default_font, "B", 7)
-        self.multi_cell(
-            w=100,
-            h=0,
-            text="INFORMAÇÕES ADICIONAIS DE INTERESSE DO FISCO",
-            border=0,
-            align="L",
-        )
-        self.set_font(self.default_font, "", 6)
-        self.set_xy(x=x_margin, y=y_middle)
-        self.multi_cell(
-            w=200,
-            h=3,
+        self._draw_dynamic_text_block(
+            title="INFORMAÇÕES ADICIONAIS DE INTERESSE DO FISCO",
             text=self.fisco,
-            border=0,
-            align="L",
+            y_start=y_margin + 85,
+            line_height=3,
+            min_content_height=41,
+            max_content_height=(self.h - self.b_margin) - (y_margin + 85) - 4,
+            allow_page_break=False,
+            overflow_suffix="",
         )
