@@ -377,7 +377,7 @@ class Danfe(xFPDF):
 
             # merge 'origem' with 'CST' of ICMS.
             orig = extract_text(el_imp_ICMS, "orig")
-            if self.crt == "1":
+            if self.crt in ["1", "4"]:
                 # Regime Simples Nacional
                 cst = extract_text(el_imp_ICMS, "CSOSN")
             else:
@@ -1368,7 +1368,7 @@ class Danfe(xFPDF):
         ).render()
         cst_label = "CST"
         cst_width = 6
-        if self.crt == "1":
+        if self.crt in ["1", "4"]:
             # Regime Simples Nacional
             cst_label = "CSOSN"
             cst_width = 8
