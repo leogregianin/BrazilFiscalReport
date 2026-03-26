@@ -11,7 +11,7 @@ from tests.conftest import assert_pdf_equal, get_pdf_output_path
 @pytest.fixture
 def load_damdfe(load_xml):
     def _load_damdfe(filename, config=None):
-        xml_content = load_xml(filename)
+        xml_content = load_xml(f"damdfe/{filename}")
         return Damdfe(xml=xml_content, config=config)
 
     return _load_damdfe

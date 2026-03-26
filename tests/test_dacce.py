@@ -12,7 +12,7 @@ def test_dacce(tmp_path, load_xml, logo_path):
         "uf": "SP",
         "fone": "(11) 1234-5678",
     }
-    xm_content = load_xml("xml_cce_1.xml")
+    xm_content = load_xml("dacce/xml_cce_1.xml")
 
     pdf_cce = DaCCe(xml=xm_content, emitente=emitente, image=logo_path)
     pdf_path = get_pdf_output_path("dacce", "cce")
