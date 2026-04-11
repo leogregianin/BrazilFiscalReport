@@ -76,6 +76,7 @@ nav:
       - DACTE: dacte.md
       - DAMDFE: damdfe.md
       - DACCe: dacce.md
+      - DANFSE: danfse.md
   - CLI: cli.md
   - Changelog: changelog.md
   - Contributing: contributing.md

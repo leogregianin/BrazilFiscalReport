@@ -187,5 +187,39 @@ def generate_damdfe(xml):
     click.echo(f"DAMDFE generated successfully: {output_path}")
 
 
+@cli.command("danfse")
+@click.argument("xml", type=click.Path(exists=True))
+def generate_danfse(xml):
+    try:
+        from brazilfiscalreport import danfse
+    except ImportError:
+        click.echo(
+            "Error: The brazilfiscalreport package"
+            "or its danfse module is not installed."
+        )
+        return
+
+    config_data = load_config()
+    top = config_data.get("TOP_MARGIN", danfse.Margins.top)
+    right = config_data.get("RIGHT_MARGIN", danfse.Margins.right)
+    bottom = config_data.get("BOTTOM_MARGIN", danfse.Margins.bottom)
+    left = config_data.get("LEFT_MARGIN", danfse.Margins.left)
+
+    xml_path = Path(xml).resolve()
+    output_path = Path.cwd() / xml_path.stem
+    output_path = output_path.with_suffix(".pdf")
+
+    with open(xml_path, encoding="utf-8") as xml_file:
+        xml_content = xml_file.read()
+
+    config = danfse.DanfseConfig(
+        margins=danfse.Margins(top=top, right=right, bottom=bottom, left=left)
+    )
+
+    danfse_instance = danfse.Danfse(xml=xml_content, config=config)
+    danfse_instance.output(output_path)
+    click.echo(f"DANFSE generated successfully: {output_path}")
+
+
 if __name__ == "__main__":
     cli()
